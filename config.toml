@@ -1,0 +1,56 @@
+# Credits: http://yagogg.github.io/blog/setting-up-a-hugo-blog-in-github-pages/
+
+baseurl = "http://syed.github.io/"
+title = "A Cloudy Affair"
+theme = "beautifulhugo"
+
+[Params]
+  logo = "img/avatar-icon.png"
+  subtitle = "My Ramblings on Cloud & Other Things"
+
+[Author]
+  name = "Syed Mushtaq Ahmed"
+  #email = "test@abcd.com"
+  #facebook = "username"
+  github = "syed"
+  #twitter = "username"
+  linkedin = "in/syedmushtaq"
+  #stackoverflow = "XXXXXXX/username"
+  #soundcloud = "username"
+  #wikipedia = "username"
+
+[[menu.main]]
+    name = "Blog"
+    url = "/"
+    weight = 1
+
+[[menu.main]]
+    name = "About"
+    url = "/page/about/"
+    weight = 2
+
+
+canonifyurls = true # Make all URLs absolute, to avoid problems loading assets
+
+pluralizelisttitles = false
+disablePathToLower = true
+
+# Set directories
+contentdir = "content"
+layoutsdir = "layouts"
+publishdir = "public"
+
+languageCode = "en-us"
+
+pygmentsuseclasses = false  #highlighting
+pygmentsstyle = "murphy"
+PygmentsCodeFences = true
+
+# Set the URL that will appear in the web browser when the user is in the blog
+# or in the static pages you create (like an 'about the author' section)
+[permalinks]
+
+fixed = ":title/"
+
+blog = ":slug/" # Slug is the file name of your post without the .md extension
+
