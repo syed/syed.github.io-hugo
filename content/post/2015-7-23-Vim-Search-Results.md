@@ -17,11 +17,11 @@ mataches and I also have a context of how my match is being used.
 
 To enable this, add the following line to your `.vimrc`
 
-{% highlight bash %}
+~~~bash
 
 map <F5> /<C-r><C-w> <CR> :vim /<C-r><C-w>/g % \| copen <CR>
 
-{% endhighlight %}
+~~~
 
 Go over a word and press `F5` to open the quickfix window with the matches.
 You can switch between the quickfix buffer and the main buffer by using

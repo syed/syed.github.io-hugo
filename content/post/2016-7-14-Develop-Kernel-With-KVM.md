@@ -13,23 +13,23 @@ everywhere.
 
 From kenrel.org or from `apt-get` both work.
 
-{% highlight bash %}
+~~~bash
 
 $ apt-get source linux-image-$(uname  -r)
 
-{% endhighlight %}
+~~~
 
 
 ## Building the kernel
 
-{% highlight bash %}
+~~~bash
 
  $ tar -xvf linux_3.13.0.orig.tar.gz 
  $ cd linux-3.13.0/
  $ make bzImage
  $ make_modules
 
-{% endhighlight %}
+~~~
 
 This should give you a kernel image in `./arch/x86_64/boot/bzImage`. Now we need to create
 an initrd which we will boot into. For this I use busybox. Make sure you have the statically
@@ -41,7 +41,7 @@ linked version of the `busybox` binary and place it in the root of the kernel so
 Save the following script in the root of the kernel source with the filename `create_initrd.sh`.
 This will build the scafollding of our initrd
 
-{% highlight bash %}
+~~~bash
 
 mkdir -p  initramfs/bin
 mkdir -p  initramfs/etc
@@ -53,11 +53,11 @@ cp busybox initramfs/bin
 cd initramfs/bin
 ln -s busybox sh
 
-{% endhighlight %}
+~~~
 
 The resultant directory structure will be:
 
-{% highlight bash %}
+~~~bash
 
 initramfs
 ├── bin
@@ -67,20 +67,21 @@ initramfs
 │   └── fstab
 ├── init
 
-{% endhighlight %}
+~~~
 
 Edit the `fstab` file and add the following lines
 
-{% highlight bash %}
+~~~bash
 
 proc /proc proc rw,noexec,nosuid,nodev 0 0
 sysfs /sys sysfs rw,noexec,nosuid,nodev 0 0
 
-{% endhighlight %}
+~~~
 
 Edit the `init` file and add the following lines
 
-{% highlight bash %}
+~~~bash
+
 #!/bin/sh
 
 # Mount things needed by this script
@@ -95,20 +96,20 @@ mknod /dev/null c 1 3
 mknod /dev/tty c 5 0
 mdev -s
 
-{% endhighlight %}
+~~~
 
 create a file `build_initrd.sh` which will be run everytime there is an update
 to initrd. This may be useful if you add your program to initrd and want to 
 run the kernel with the new program. This goes in the root of your kernel source
 
-{% highlight bash %}
+~~~bash
 
 cd initramfs
 find . | cpio -H newc -o > ../initramfs.cpio
 cd ..
 cat initramfs.cpio | gzip > initramfs.igz
 
-{% endhighlight %}
+~~~
 
 
 ## Running the kernel with KVM
@@ -116,7 +117,7 @@ cat initramfs.cpio | gzip > initramfs.igz
 Finally we are ready with our kernel and initrd. Create the file `run_kernel.sh` 
 which will run the kenrnel in your terminal. 
 
-{% highlight bash %}
+~~~bash
 
 kvm -kernel arch/x86_64/boot/bzImage \
     -initrd initramfs.gz \
@@ -128,7 +129,7 @@ kvm -kernel arch/x86_64/boot/bzImage \
     -append 'console=hvc0'\
     -s
 
-{% endhighlight %}
+~~~
 
 
 ## Debugging using remote `gdb`
@@ -138,13 +139,13 @@ current terminal. It also starts a gdb server for debugging which is listening
 on port `tcp:1234`. You can use a remote `gdb` to  debug.
 
 
-{% highlight bash %}
+~~~bash
 
  $ gdb vmlinux
  (gdb) set architecture  i386:x86-64
  (gdb) target remote :1234
 
-{% endhighlight %}
+~~~
 
 That's it. Once the kernel is up and running, you can attach the debugger and
 debug. If you want to add any modules, throw them in the initramfs directory,
